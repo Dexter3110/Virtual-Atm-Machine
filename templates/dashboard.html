@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <!-- Welcome Section -->
+    <div class="col-12 mb-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h2 class="mb-0">Welcome, {{ user_name }}</h2>
+                <p class="mb-0">Your Account Dashboard</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Balance Section -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Account Balance</h4>
+            </div>
+            <div class="card-body text-center">
+                <h3 class="display-4 mb-0">${{ "%.2f"|format(balance) }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Section -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Recent Transactions</h4>
+                <a href="{{ url_for('download_transactions') }}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-download me-2"></i>Download
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                                <td>
+                                    {% if transaction[0] == 'deposit' %}
+                                    <span class="badge bg-success">Deposit</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">Withdrawal</span>
+                                    {% endif %}
+                                </td>
+                                <td>${{ "%.2f"|format(transaction[1]) }}</td>
+                                <td>{{ transaction[2] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="col-12 mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Quick Actions</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form action="{{ url_for('deposit') }}" method="POST">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Deposit Money</h5>
+                                    <div class="form-group mb-3">
+                                        <label for="deposit_amount">Amount</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="deposit_amount" name="amount" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="deposit_pin">ATM PIN</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                            <input type="password" class="form-control" id="deposit_pin" name="atm_pin" required>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-plus-circle me-2"></i>Deposit
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <form action="{{ url_for('withdraw') }}" method="POST">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Withdraw Money</h5>
+                                    <div class="form-group mb-3">
+                                        <label for="withdraw_amount">Amount</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="withdraw_amount" name="amount" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="withdraw_pin">ATM PIN</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                            <input type="password" class="form-control" id="withdraw_pin" name="atm_pin" required>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-minus-circle me-2"></i>Withdraw
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Enter PIN</h2>
+    <form method="POST">
+        <label for="pin">PIN:</label>
+        <input type="password" name="pin" required>
+        <input type="hidden" name="action" value="{{ action }}">
+        <input type="hidden" name="amount" value="{{ amount }}">
+        <button type="submit">Submit</button>
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+    </form>
+{% endblock %}
